@@ -1,0 +1,19 @@
+name: Validate selected skills
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    if: github.repository == 'daithinh2401/matt-pocock-skills'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python3 -m unittest discover -s local-integration -p 'test_*.py' -v
+      - run: python3 local-integration/export.py

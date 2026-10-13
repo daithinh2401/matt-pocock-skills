@@ -1,0 +1,51 @@
+{
+  "upstream": "https://github.com/mattpocock/skills",
+  "fork": "https://github.com/daithinh2401/matt-pocock-skills",
+  "source_commit": "49dd158d1076134a641b33efb035946536778336",
+  "skills": {
+    "grill-with-docs": {
+      "path": "skills/engineering/grill-with-docs",
+      "requires": [
+        "grilling",
+        "domain-modeling"
+      ]
+    },
+    "grilling": {
+      "path": "skills/productivity/grilling",
+      "requires": []
+    },
+    "domain-modeling": {
+      "path": "skills/engineering/domain-modeling",
+      "requires": []
+    },
+    "improve-codebase-architecture": {
+      "path": "skills/engineering/improve-codebase-architecture",
+      "requires": [
+        "codebase-design",
+        "grilling",
+        "domain-modeling"
+      ]
+    },
+    "codebase-design": {
+      "path": "skills/engineering/codebase-design",
+      "requires": []
+    }
+  },
+  "source_sha256": {
+    "skills/engineering/grill-with-docs/SKILL.md": "7de372c13488f1ee96cc11cd8907b56b6809cc93eef776eeddd37de6b6cbe3fe",
+    "skills/engineering/grill-with-docs/agents/openai.yaml": "94cd0ab161fb468a836349f5ed482ba58ce8e709a05c57ce533d739dbd35cca9",
+    "skills/productivity/grilling/SKILL.md": "befdff1e27a1dfe2a294d5871169ac1afe16d983911daa4f32627514a48c1e15",
+    "skills/productivity/grilling/agents/openai.yaml": "1411d7df7d99b7e621a1ff8283c8133cc2464be63d064e52d8ce169c6800ee9b",
+    "skills/engineering/domain-modeling/ADR-FORMAT.md": "944c92aa790e8fbdc9199640b170979abb8a34ba8d0fe18c2a01a63bce140ca0",
+    "skills/engineering/domain-modeling/GLOSSARY-FORMAT.md": "21dcc40cdec8e151a829b98ab1517c1867bc444e3665134a98c6983411996801",
+    "skills/engineering/domain-modeling/SKILL.md": "7b925d7b1e341a2eeae33ad68a8a8c0ab889a38ddd22a7598e4c240e5a7556a3",
+    "skills/engineering/domain-modeling/agents/openai.yaml": "f6bf2aa996c6e6f53fdd0708e18a0d16a56aed8322cca59fedbe3c0d2c75f06b",
+    "skills/engineering/improve-codebase-architecture/HTML-REPORT.md": "581e8bb5a521e46bbda8ca7e19b15948bed882187108092ebb90c62513b77528",
+    "skills/engineering/improve-codebase-architecture/SKILL.md": "552240a5ab5cec6b67c15dd1ad6e9f6962b1bca6ce870059a8c2713760c20392",
+    "skills/engineering/improve-codebase-architecture/agents/openai.yaml": "c8cb20f68ebf0edb4e497bc11ae5fcaa196004e661cd189015b04f4109ced7f1",
+    "skills/engineering/codebase-design/DEEPENING.md": "f3dd099ce99289bd213914d8ee3e2429b78309c3957ca4583f7659551b1d53c1",
+    "skills/engineering/codebase-design/DESIGN-IT-TWICE.md": "52b52e75655a27aea59c6966b410bac82448968ad46ef1ebb9f07c274e3ae010",
+    "skills/engineering/codebase-design/SKILL.md": "2c20617f87ec8af6a434859f381b2f061a69b530444e74eb39e78bb016a6d1e2",
+    "skills/engineering/codebase-design/agents/openai.yaml": "edebc9e4fcfe102114012575eaa9600b9b5fd08c311664f389c36e7bc717740f"
+  }
+}

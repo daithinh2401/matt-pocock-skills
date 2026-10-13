@@ -1,0 +1,113 @@
+name: Sync upstream for review
+on:
+  schedule:
+    - cron: '20 3 * * 1'
+  workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+concurrency:
+  group: sync-upstream
+  cancel-in-progress: false
+jobs:
+  sync:
+    if: github.repository == 'daithinh2401/matt-pocock-skills'
+    runs-on: ubuntu-latest
+    env:
+      SYNC_APP_ID: ${{ secrets.SYNC_APP_ID }}
+    steps:
+      - name: Mint optional sync App token
+        id: app
+        if: env.SYNC_APP_ID != ''
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.SYNC_APP_ID }}
+          private-key: ${{ secrets.SYNC_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+          permission-workflows: write
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ steps.app.outputs.token || github.token }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare review branch
+        id: merge
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch https://github.com/mattpocock/skills.git main
+          upstream=$(git rev-parse FETCH_HEAD)
+          if git merge-base --is-ancestor "$upstream" HEAD; then
+            echo 'Upstream is already included; no PR needed.' >> "$GITHUB_STEP_SUMMARY"
+            echo 'changed=false' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          branch="sync/upstream-${upstream:0:12}"
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+          echo 'changed=true' >> "$GITHUB_OUTPUT"
+          if git ls-remote --exit-code --heads origin "$branch"; then
+            git fetch origin "$branch"
+            git checkout -b "$branch" FETCH_HEAD
+            # Preserve any review fixes already pushed to this branch.
+            git merge origin/main --no-edit
+          else
+            git checkout -b "$branch"
+            if ! git merge "$upstream" --no-edit; then
+              git merge --abort
+              echo 'Merge conflict. Resolve upstream locally; main was not changed.' >> "$GITHUB_STEP_SUMMARY"
+              exit 1
+            fi
+          fi
+      - name: Check selected skills on merged tree
+        if: steps.merge.outputs.changed == 'true'
+        id: check
+        run: |
+          set -euo pipefail
+          if python3 -m unittest discover -s local-integration -p 'test_*.py' -v > /tmp/selected-tests.log 2>&1; then
+            echo 'result=passed' >> "$GITHUB_OUTPUT"
+          else
+            echo 'result=failed' >> "$GITHUB_OUTPUT"
+          fi
+          cat /tmp/selected-tests.log
+      - name: Push review branch
+        if: steps.merge.outputs.changed == 'true'
+        env:
+          BRANCH: ${{ steps.merge.outputs.branch }}
+        run: |
+          set -euo pipefail
+          if ! git push origin "HEAD:refs/heads/$BRANCH"; then
+            echo 'Could not push review branch. Upstream workflow changes require a sync App token with workflows:write; configure SYNC_APP_ID and SYNC_APP_PRIVATE_KEY. Main was not changed.' >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+      - name: Open review PR
+        if: steps.merge.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token || github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: ${{ steps.merge.outputs.branch }}
+          RESULT: ${{ steps.check.outputs.result }}
+        run: |
+          set -euo pipefail
+          cat > /tmp/sync-body.md <<EOF
+          Merge upstream into this fork for review. Selected-skill validation: **$RESULT**.
+
+          If the selected sources changed, review their diff, update the narrow overrides and selection lock, and rerun validation before merging. Do not refresh hashes without reviewing the source changes.
+
+          This workflow does not merge main or update Anni. With GITHUB_TOKEN, normal PR workflows are not triggered; the sync job runs validation itself. Human review is still required.
+          EOF
+          existing=$(gh api "repos/$REPO/pulls?state=open&head=${REPO%%/*}:$BRANCH" --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            gh api --method PATCH "repos/$REPO/pulls/$existing" -f body="$(cat /tmp/sync-body.md)" --jq .html_url >> "$GITHUB_STEP_SUMMARY"
+          else
+            gh api --method POST "repos/$REPO/pulls" -f title='chore: review upstream skills update' -f head="$BRANCH" -f base=main -f body="$(cat /tmp/sync-body.md)" --jq .html_url >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Fail visibly when adaptation needs review
+        if: steps.check.outputs.result == 'failed'
+        run: |
+          echo 'Selected upstream files or overrides need review. The PR is open; do not merge before validation passes.' >> "$GITHUB_STEP_SUMMARY"
+          exit 1

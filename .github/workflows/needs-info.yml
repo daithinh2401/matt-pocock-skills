@@ -14,6 +14,7 @@ permissions: {}
 
 jobs:
   close:
+    if: github.repository == 'mattpocock/skills'
     runs-on: ubuntu-latest
     permissions:
       issues: write

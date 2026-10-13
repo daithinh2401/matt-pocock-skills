@@ -1,0 +1,107 @@
+[
+  {
+    "path": "grill-with-docs/SKILL.md",
+    "before": "description: A relentless interview to sharpen a plan or design, which also creates docs (ADR's and glossary) as we go.",
+    "after": "description: \"Clarify an underspecified software feature or design and capture resolved domain terms and decisions. Use before spec writing when requirements or domain trade-offs remain open. Skip settled specs, routine implementation, debugging, and prose-only edits.\""
+  },
+  {
+    "path": "grill-with-docs/SKILL.md",
+    "before": "disable-model-invocation: true\n",
+    "after": ""
+  },
+  {
+    "path": "grill-with-docs/agents/openai.yaml",
+    "before": "allow_implicit_invocation: false",
+    "after": "allow_implicit_invocation: true"
+  },
+  {
+    "path": "grilling/SKILL.md",
+    "before": "description: Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or uses any 'grill' trigger phrases.",
+    "after": "description: \"Stress-test unresolved decisions in a plan or idea through focused interview rounds. Use for explicit grilling or as the interview support for grill-with-docs and architecture exploration. Reuse settled answers; do not restart an approved plan.\""
+  },
+  {
+    "path": "improve-codebase-architecture/SKILL.md",
+    "before": "description: Scan a codebase for deepening opportunities, present them as a visual HTML report, then grill through whichever one you pick.",
+    "after": "description: \"Survey architectural friction and compare refactoring opportunities with before/after visuals. Use for an architecture assessment or refactor candidate exploration. Skip routine bug fixes, a chosen implementation task, and requests only to explain or diagram existing architecture.\""
+  },
+  {
+    "path": "improve-codebase-architecture/SKILL.md",
+    "before": "disable-model-invocation: true\n",
+    "after": ""
+  },
+  {
+    "path": "improve-codebase-architecture/agents/openai.yaml",
+    "before": "allow_implicit_invocation: false",
+    "after": "allow_implicit_invocation: true"
+  },
+  {
+    "path": "codebase-design/SKILL.md",
+    "before": "description: Shared vocabulary for designing deep modules. Use when the user wants to design or improve a module's interface, find deepening opportunities, decide where a seam goes, make code more testable or AI-navigable, or when another skill needs the deep-module vocabulary.",
+    "after": "description: \"Reason about deep modules, interface complexity, and test seams. Use while designing or comparing module interfaces, or to support an architecture assessment. Preserve project architecture vocabulary; do not launch a repository-wide audit for routine edits.\""
+  },
+  {
+    "path": "grilling/SKILL.md",
+    "before": "Interview the user relentlessly until you reach a shared understanding.",
+    "after": "Start from the existing conversation, spec, and decisions. Interview only about material unresolved requirements until you reach a shared understanding."
+  },
+  {
+    "path": "grilling/SKILL.md",
+    "before": "dispatch a sub-agent to find it",
+    "after": "look it up yourself, or delegate only when permitted by the host and project policy"
+  },
+  {
+    "path": "grilling/SKILL.md",
+    "before": "Do not act on it until the user confirms you have reached a shared understanding.",
+    "after": "Summarize resolved decisions and remaining questions. Existing approval remains valid; do not ask again for settled decisions. Hand off to the project workflow when clarification is complete, preserving its spec and implementation approval boundaries."
+  },
+  {
+    "path": "codebase-design/SKILL.md",
+    "before": "Use these terms exactly: don't substitute \"component,\" \"service,\" \"API,\" or \"boundary.\" Consistent language is the whole point.",
+    "after": "Use these terms as an analytical lens. Keep existing project terms, identifiers, and C3 component/service/API names; explain how they map to modules and seams without renaming canonical concepts."
+  },
+  {
+    "path": "improve-codebase-architecture/SKILL.md",
+    "before": "Use these terms exactly in every suggestion, and don't drift into \"component,\" \"service,\" \"API,\" or \"boundary.\"",
+    "after": "Use these as analytical terms alongside the project's canonical architecture names; never rename C3 components or services to fit this vocabulary."
+  },
+  {
+    "path": "improve-codebase-architecture/SKILL.md",
+    "before": "Then spawn a sub-agent to walk the codebase.",
+    "after": "Explore the scoped code yourself, or delegate when permitted by the host and project policy."
+  },
+  {
+    "path": "improve-codebase-architecture/SKILL.md",
+    "before": "not \"the FooBarHandler,\" and not \"the Order service.\"",
+    "after": "while retaining canonical implementation identifiers and service names where needed to locate evidence."
+  },
+  {
+    "path": "codebase-design/DEEPENING.md",
+    "before": "Old unit tests on shallow modules become waste once tests at the deepened module's interface exist; delete them.",
+    "after": "Propose any test consolidation separately. Preserve existing tests unless their removal is explicitly authorized and replacement coverage is demonstrated; the project testing doctrine takes precedence."
+  },
+  {
+    "path": "codebase-design/DEEPENING.md",
+    "before": "Tests use an in-memory adapter.",
+    "after": "Tests use the project-approved adapter strategy and shared contract tests where required."
+  },
+  {
+    "path": "codebase-design/DEEPENING.md",
+    "before": "tests provide a mock adapter.",
+    "after": "tests provide an injected fake or adapter allowed by the project testing doctrine, never a banned module mock."
+  },
+  {
+    "path": "codebase-design/DESIGN-IT-TWICE.md",
+    "before": "Spawn 3+ sub-agents in parallel. Each must produce a **radically different** interface for the deepened module.",
+    "after": "Compare materially different interfaces, using the requested count or three by default. Use parallel sub-agents only when permitted by the host and project policy and capacity is available; otherwise develop the alternatives sequentially. Never recurse into further delegation."
+  },
+  {
+    "path": "domain-modeling/ADR-FORMAT.md",
+    "before": "ADRs live in `docs/adr/` and use sequential numbering: `0001-slug.md`, `0002-slug.md`, etc.",
+    "after": "Follow the project's existing ADR directory, template, and numbering first. New proposals start as Proposed; mark Accepted only with recorded owner approval. The lightweight template below is a fallback for projects with no convention. ADRs normally live in `docs/adr/` and use sequential numbering: `0001-slug.md`, `0002-slug.md`, etc."
+  },
+  {
+    "path": "domain-modeling/SKILL.md",
+    "before": "description: Build and sharpen a project's domain model. Use when discussing codebase terminology, writing or editing a GLOSSARY.md, or recording or editing an ADR.",
+    "after": "description: \"Actively refine domain concepts and record agreed terminology or decisions. Use when resolving ambiguous domain terms, changing a glossary, or proposing a domain ADR. Skip read-only glossary explanations and ordinary document proofreading.\""
+  }
+]
