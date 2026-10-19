@@ -1,7 +1,8 @@
 name: Sync upstream for review
 on:
   schedule:
-    - cron: '20 3 * * 1'
+    # 00:00 Monday Asia/Ho_Chi_Minh (UTC+7) = 17:00 Sunday UTC
+    - cron: '0 17 * * 0'
   workflow_dispatch:
 permissions:
   contents: write
